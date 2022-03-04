@@ -1,0 +1,304 @@
+# EXT: Using Social Surveys: Multilevel-modeling and survey weights
+
+*Note that this page provides additional content that goes well beyond the syllabys of the Core Quantitative Methods module - you are **not** expecte to be able to use multi-level modeling, but might find it useful to understand nonetheless.* 
+
+In order to analyse social survey datasets, we need to take accounts of two facts: the data usually needs to be weighted to become more representative of the population, and you need to account for the fact that the respondents tend to be clustered into specific groups, rather than independent from each other.
+
+## Survey weights in the European Social Survey
+
+As an example, the European Social Survey can be used to estimate attitudes of Europeans. However, for that it needs to reflect the population of the 29 countries in the sample representatively. It does not do that for three reasons, as outlined in the [official guide](https://www.europeansocialsurvey.org/methodology/ess_methodology/data_processing_archiving/weighting.html){target="_blank"} to weighting the ESS:
+
+- survey *design*: this is used to correct for the fact that due to the sampling strategy, certain groups of people have a higher chance to be included than others. For instance, this might be because households are sampled first and then individuals within these households. This increases the share of individuals living in small households so that they need to be given lower weight in the statistical analyses. This is how the ESS sampling works in the UK.^[[This guide](https://bookdown.org/jespasareig/Book_How_to_weight_a_survey/design-weights.html){target="_blank"} provides a detailed example regarding design weights in the UK sample.]
+- *sampling error* and *differential response rates*: beyond different inclusion probabilities due to the survey design, some types of participants might randomly be under- or over-represented, while others might be particularly likely or unlikely to agree to participate when asked. Post-stratification weights are used to correct for these errors and to make sure that the weighted sample matches the *national* population with regard to age group, gender, education and region.
+- different national *population sizes*: This is a special factor in international surveys. These tend to have similar sample sizes in each participating country, while - obviously - some countries have much larger populations. Thus, statistics calculated across the sample will tend to give too much weight to small countries. To get correct Europe-wide estimates, respondents from large countries need to be given greater weight.
+
+Each of these types of weights is provided separately in the dataset: `dweight` (design weights), `pspwght` (post-stratification weight) and `pweight` (population weights). They also offer a combined analysis weight (`anweight`) that includes all the information, which they claim is suitable for "all types of analysis". However, we will see below when it might not be appropriate to correct for population sizes. In any cases, ESS analyses should *always* weight the data.
+
+
+`r hide("Show how to get the ESS 2018 data into R and prepare the analysis dataset")`
+
+```{r include=FALSE}
+my_email <- "lukas.wallrich@gmail.com"
+options("dplyr.summarise.inform" = FALSE)
+```
+
+
+### Load the data
+
+```{r}
+if(!require(pacman)) install.packages("pacman")
+pacman::p_load(essurvey, #To access survey data
+               tidyverse, #For data manipulation and plotting
+               gt, #For nicely formatted tables
+               countrycode, #To replace ESS country codes by names
+               modelsummary, #Create pretty model summary tables
+               lme4, #For multi-level modeling
+               lmerTest, #Add p-values to lme4 multi-level models
+               broom.mixed, #Extract coefficients from lme4 models
+               sjPlot) #Plot regression models  
+#You need to register at https://www.europeansocialsurvey.org/user/new
+#and then set your email here.
+set_email(my_email)  
+#Round 9 is from 2018
+ess_data <- import_rounds(9)
+```
+
+### Prepare for analysis
+
+```{r}
+#Fiddly - check if any household member is a husband/wife/partner
+#The survey asks about all household members - rshipa2 to rshipa15
+#and any one of them could be a partner (coded as 1)
+
+ess_data$lives_with_partner <- ess_data %>% select(matches("rshipa")) %>% 
+  mutate(across(everything(), ~.x == 1)) %>% rowSums(na.rm = TRUE) %>%
+  as.logical() %>% #Converts 1 into TRUE, 0 into FALSE
+  ifelse("yes", "no") %>% factor()
+
+#####
+# Create dataset for analysis
+#####
+
+ess_maternity <- ess_data %>% 
+  #Filter women of prime working age who are not students
+  filter(gndr==2, agea >= 18, agea <= 59, edctn != 1) %>%
+  #Select birth of last child OR only child (provided separately)
+  #Then code young_child if born in last 12 years
+  mutate(last_child = coalesce(ycldbyr, fcldbrn), 
+         young_child = ifelse((!is.na(last_child) & last_child > (2018-12)), 
+                              "yes", "no") %>% factor(),
+         #Reverse so that higher numbers more traditional
+         gender_traditionalism = 6-aftjbyc) %>% 
+  select(lives_with_partner, young_child, last_child, bthcld, cntry, 
+            wkhtot, agea, eduyrs, anweight, pspwght, gender_traditionalism) %>%
+  # Calculate standardised age and working hours gap per country
+  group_by(cntry) %>%
+  mutate(working_hour_deviance = wkhtot - mean(wkhtot, na.rm = TRUE),
+         age_std = scale(agea)) %>%
+  ungroup() %>%
+  #Add country names (for graph labeling)
+  mutate(country_name = countrycode(cntry, "iso2c", "iso.name.en"))
+
+```
+
+`r unhide()`
+
+## Example: understanding female labour market participation with small child
+
+To explore survey weighting and the use of multi-level modeling, I will show some analyses inspired by a published article [@andringa2015women] on the relationship between motherhood and working hours.
+
+### Exploring descriptive statistics
+
+Firstly, some exploration: do mothers of young children work less than other women? To see the impact of weights, I show weighted and unweighted means side-by-side. Note that the gap is larger in the weighted data (which small countries might be responsible for that?)
+
+```{r}
+ess_maternity %>% 
+  group_by(young_child) %>%
+  summarise(`Mean working hours` = mean(wkhtot, na.rm = TRUE),
+            `... (weighted)` = weighted.mean(wkhtot, anweight, na.rm = TRUE)) %>%
+  gt() %>% tab_header("Working hours for women depending on having a young child") %>%
+  fmt_number(columns = c(2,3), decimals = 1)
+```
+
+The association will likely be different between countries. So let's look at the gap per country visually.
+
+```{r message=FALSE}
+ess_maternity %>% 
+  group_by(country_name, young_child) %>% 
+  summarise(working_hours = weighted.mean(wkhtot, anweight, na.rm = TRUE)) %>%
+  pivot_wider(names_from = young_child, values_from = working_hours) %>%
+  mutate(gap = yes - no) %>%
+  drop_na() %>% #Remove missing values
+  ggplot(aes(x = gap, y = reorder(country_name, gap), fill = gap)) + geom_col() +
+  scale_fill_gradient2() + 
+  labs(title = "Difference in working hours depending on motherhood",
+       subtitle = "... comparing mothers of children < 12 with other women",
+       x = "Mean difference in weekly working hours",
+       y = "Country",
+       caption = "Data: ESS Wave 9 (2018)",
+       fill = "Maternity gap")
+```
+
+### Predictors of mothers' working hours
+
+When faced with such a gap between groups, we certainly want to control for possible confounders - for instance, mothers with young children are likely to be younger and more likely to live with a partner. `datasummary_balance()` is a helpful function to compare groups at a glance.
+
+```{r}
+ess_maternity %>% select(young_child, lives_with_partner, age = agea, 
+                         "education (years)" = eduyrs, gender_traditionalism,
+                         weights = anweight) %>%
+  mutate(across(where(is.numeric), as.numeric)) %>%
+  datasummary_balance(~young_child, ., 
+                      dinm = FALSE,
+                      output = "gt") %>%
+  tab_header("Mothers with young children ...", "... differ systematically from other women")
+```
+
+Given the systematic differences, we might want to control for them, to see if the effect of having a young child persists. A simple linear model is a reasonable starting point.
+
+```{r}
+lm(wkhtot ~ young_child + agea + eduyrs + lives_with_partner + gender_traditionalism, 
+   data = ess_maternity, weights = ess_maternity$anweight) %>% 
+  modelsummary(estimate = "{estimate} ({std.error}){stars}", statistic = NULL,
+               gof_omit = "^(?!R2|Num)",
+               output = "gt") %>%
+  tab_header("Linear regression with covariates")
+```
+
+This suggests that the effect survives controlling for covariates. However, this assumes uniform relationships across all countries - which is implausible, given the discrepancies we have already seen. How do we include these?
+
+#### Differences between countries - fixed or random?
+
+Within the framework of linear regression, we might just add dummy variables for each country. That is very simple in R - just add `+ cntry` to the regression formula and dummy coding is taken care of automatically. However, this gives us 27 additional model terms that are freely estimated - this is what is called a *fixed* effect and assumes that the intercept (or mean) in France should be estimated without any reference to the intercept in Germany.
+
+Alternatively, we might believe that all national means come from the same distribution, and just vary around the grand mean. If we believe that, we should take into account the grand mean and engage in partial pooling. This is what *random* effects do - think of *random* variation around a given mean. They are estimated in multi-level models.
+
+(As a third option, we might always believe that all national population means are the same, and that they only differ due to sampling error. This is the assumption of a linear regression model that completely pools the information across groups, but is clearly not supported here.)
+
+The table for the `lm()` model with fixed effects is rather long, so I hide it here. Let's rather visually compare fixed and random effects to start thinking about multilevel models.
+
+`r hide("Show model table with fixed effects of countries")`
+
+
+```{r}
+lm(wkhtot ~ young_child + agea + eduyrs + lives_with_partner + gender_traditionalism + cntry, 
+   data = ess_maternity, weights = ess_maternity$anweight) %>% 
+  modelsummary(estimate = "{estimate} ({std.error}){stars}", statistic = NULL,
+               gof_omit = "^(?!R2|Num)",
+               output = "gt") %>%
+  tab_header("Linear regression with fixed effects per country")
+```
+
+`r unhide()`
+
+`r hide("Show code to calculate random intercepts and prepare visualisation")`
+
+```{r}
+mod_fixed <- lm(wkhtot ~ agea + lives_with_partner + eduyrs + cntry, 
+                ess_maternity, weights = ess_maternity$anweight)
+
+mod_random <- lmer(wkhtot ~ agea + lives_with_partner + eduyrs + (1|cntry), 
+                   ess_maternity, weights = ess_maternity$anweight)
+
+fixed_intercepts <- get_model_data(mod_fixed, type = "est") %>%
+  filter(str_detect(term, "cntry")) %>%
+  mutate(type = "fixed", cntry = str_sub(term, start = -2)) %>%
+  select(type, cntry, estimate, conf.low, conf.high)
+
+random_intercepts <- get_model_data(mod_random, type = "re") %>%
+  mutate(type = "random") %>%
+  select(type, cntry = term, estimate, conf.low, conf.high)
+
+#Fixed intercepts are relative to a specific reference category
+#To compare them, they should be shifted to refer to the same intercept
+#as the random intercepts do
+intercept_shift <- 
+  (tidy(mod_random) %>% filter(term == "(Intercept)") %>% pull(estimate)) -
+  (tidy(mod_fixed) %>% filter(term == "(Intercept)") %>% pull(estimate))
+
+fixed_intercepts <- fixed_intercepts %>%
+  mutate(estimate = estimate - intercept_shift,
+         conf.low = conf.low - intercept_shift,
+         conf.high = conf.high - intercept_shift)
+
+```
+
+`r unhide()`
+
+```{r}
+fixed_intercepts %>% bind_rows(random_intercepts) %>% 
+  mutate(country_name = countrycode(cntry, "iso2c", "iso.name.en")) %>%
+  ggplot(aes(x = reorder(country_name, estimate), y = estimate, col = type)) + 
+  geom_point(position = position_dodge(.5), size = 2) +
+  geom_errorbar(aes(ymin=conf.low, ymax=conf.high), position = position_dodge(.5), size = .8) +
+  coord_flip() +
+  labs(title = "Comparison of fixed (red) and random (blue) intercepts",
+       subtitle = "between countries (for all women in sample)",
+       caption = "Error bars show 95% confidence intervals",
+       y = "Estimated conditional intercept (deviation from grand mean)", 
+       x = "Country") +
+  #Remove legend
+   theme(legend.position = "none") + 
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed")
+```
+
+When comparing the fixed-effect and random-effect estimates, two patterns appear: 1) the random effects are *less extreme* because the data is partially pooled when they are estimated. 2) They are also estimated more precisely, with *narrower confidence intervals* - again because the entire dataset informs each of the points, not just the observations from that country. (NB: Note that smaller countries have estimates that seem to be much less precise - that is arguably because in this instance, `anweight` is not the right weight to use, despite the ESS guidance.)^[The difference in population weights makes it look like the estimate for Iceland is based on just 7 responses from there, rather than the 203 who actually responded, while conversely, the 619 responses from Germany are weighted like 1933 responses. Thus, if the national level is of greatest interest, using post-stratification weights might allow for better inference - but they will change the estimates of Europe-wide effects. What would you choose to report? Both? It's an example for judgements required when using weighted survey data.]
+
+#### Getting back to maternity - interactions or random slopes?
+
+Controlling for differences in the average working hours is certainly worth doing, but ultimately, we are interested in the effect of having a young child. How does this differ between countries? This can again be seen as a fixed effect, where the effect in Germany is entirely unrelated to that in France. However, it appears more plausible that there is some common effect from which countries then deviate - this is what can be estimated with *random slopes*. The following code shows how to estimate both types of models and the chart shows the difference in results. Once again, the *random* effects approach results in partial pooling, and thus in less extreme estimates.
+
+```{r}
+#... as fixed interactions
+mod_fixed <- lm(wkhtot ~ young_child * cntry + lives_with_partner + agea + eduyrs, 
+   ess_maternity, weights = ess_maternity$anweight)
+
+#... as random slopes
+mod_random <- lmer(wkhtot ~ lives_with_partner + agea + eduyrs + young_child + 
+                     (young_child | cntry), 
+   ess_maternity, weights = ess_maternity$anweight)
+
+```
+
+`r hide("Show code to extract estimates and prepare for plotting")`
+
+```{r}
+fixed_interactions <- get_model_data(mod_fixed, type = "pred", terms = c("cntry", "young_child"))
+
+#Can only return prediction intervals - not interesting here
+random_slopes <- get_model_data(mod_random, type = "pred", terms = c("cntry", "young_child"),
+                                     pred.type = "re")
+
+#Country labels get replaced by indices in this function - need to be restored
+country_labels <- attributes(fixed_interactions)$x.axis.labels
+
+fixed_interactions <- fixed_interactions %>% 
+  data.frame() %>% group_by(x) %>% 
+  summarise(estimate = diff(predicted),
+         cntry = country_labels[x],
+         type = "interaction term")
+
+random_slopes <- random_slopes %>% 
+  data.frame() %>% group_by(x) %>% 
+  summarise(estimate = diff(predicted),
+         cntry = country_labels[x],
+         type = "random slope")
+
+ 
+ fixed_interactions %>% bind_rows(random_slopes) %>% 
+  mutate(country_name = countrycode(cntry, "iso2c", "iso.name.en")) %>%
+  ggplot(aes(x = reorder(country_name, estimate), y = estimate, col = type)) + 
+  geom_point(position = position_dodge(.5), size = 2) +
+  coord_flip() +
+  labs(title = "Comparison of fixed effects (interaction, red) and random slopes (blue)",
+       subtitle = "for working hour difference between mothers of <12 year olds and other women",
+       caption = "Error bars cannot be shown - comparable standard errors not available",
+       y = "Estimated difference between mothers of young children and other women", 
+       x = "Country") +
+  #Remove legend
+   theme(legend.position = "none") + 
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed")
+
+```
+
+`r unhide()`
+
+#### Cross-level interactions
+
+Often, we are interested in the influence of higher-level factors on lower-level outcomes - e.g., of social norms or national policies on individual-level outcomes. In the context of multilevel modeling, this is called a *cross-level* interaction. In the ESS data here, we have a measure of social norms that we can use to create national averages for a bias against labour market participation of mothers with young children.^[Specifically, the ESS asked whether it would be ok for mothers / fathers of children below 3-years old to work full time (aftjbyc). Respondents were randomized to either answer this battery of questions with regard to men or women (admge) so that the responses of these two subgroups need to be compared. The difference in mean responses - i.e. the extent to which it is seen as more ok for men than women to work full-time in this situation - is taken to be an indicator of a biased social norm here.]
+
+```{r}
+national_bias <- ess_data %>% 
+  group_by(cntry, admge) %>% 
+  #admge whether asking about men or women in subsequent questions
+  summarise(support_working = mean(aftjbyc, na.rm = TRUE)) %>%
+  drop_na() %>%
+  summarise(gender_bias = diff(support_working))
+```
+
+
+
+## Further resources {#further-resources-meta}
+
+* This [guide to running meta-analyses in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/){target="_blank"} starts from the basics but then quite quickly reaches the level of detail needed to actually produce trustworthy results.
+* This [collaborative "syllabus"](http://mgto.org/metaanalysissyllabus){target="_blank"} has a wealth of material that addresses both theoretical concerns and practical know-how. 

@@ -1,0 +1,6 @@
+"0","(tidy(mod_fixed) %>% filter(term == ""(Intercept)"") %>% pull(estimate))
+"
+"1","[1]"
+"1"," 28.70729"
+"1","
+"

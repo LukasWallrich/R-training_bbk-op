@@ -1,0 +1,22 @@
+"0","ess_maternity <- ess_data %>% 
+  #Filter women of prime working age who are not students
+  filter(gndr==2, agea >= 18, agea <= 59, edctn != 1) %>%
+  #Select birth of last child OR only child (provided separately)
+  #Then code young_child if born in last 12 years
+  mutate(last_child = coalesce(ycldbyr, fcldbrn), 
+         young_child = ifelse((!is.na(last_child) & last_child > (2018-12)), 
+                              ""yes"", ""no"") %>% factor(),
+         #Reverse so that higher numbers more traditional
+         gender_traditionalism = 5-aftjbyc) %>% 
+  select(lives_with_partner, last_child, bthcld, cntry, 
+            wkhtot, agea, eduyrs, anweight, pspwght, gender_traditionalism) %>%
+  # Calculate standardised age and working hours gap per country
+  group_by(cntry) %>%
+  mutate(working_hour_deviance = wkhtot - mean(wkhtot, na.rm = TRUE),
+         age_std = scale(agea)) %>%
+  ungroup()
+"
+"2","Error: Can't subset columns that don't exist.
+[31mx[39m Column `lives_with_partner` doesn't exist.
+[90mRun `rlang::last_error()` to see where the error occurred.[39m
+"

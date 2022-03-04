@@ -1,0 +1,18 @@
+"0","ess_maternity %>% 
+  group_by(country_name, young_child) %>% 
+  #summarise(working_hours = weighted.mean(wkhtot, anweight, na.rm = TRUE)) %>%
+  summarise(working_hours = mean(wkhtot, na.rm = TRUE)) %>%
+  pivot_wider(names_from = young_child, values_from = working_hours) %>%
+  mutate(gap = yes - no) %>%
+  drop_na() %>% #Remove missing values
+  ggplot(aes(x = gap, y = reorder(country_name, gap), fill = gap)) + geom_col() +
+  scale_fill_gradient2() + 
+  labs(title = ""Difference in working hours depending on motherhood"",
+       subtitle = ""... comparing mothers of children < 12 with other women"",
+       x = ""Mean difference in weekly working hours"",
+       y = ""Country"",
+       caption = ""Data: ESS Wave 9 (2018)"",
+       fill = ""Maternity gap"")
+"
+"1","`summarise()` has grouped output by 'country_name'. You can override using the `.groups` argument.
+"

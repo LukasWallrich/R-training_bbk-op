@@ -1,0 +1,567 @@
+{
+    "sources": [
+        {
+            "URL": "http://yihui.name/knitr/",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                }
+            ],
+            "edition": "2nd",
+            "id": "xie2015",
+            "issued": {
+                "date-parts": [
+                    [
+                        2015
+                    ]
+                ]
+            },
+            "note": "ISBN 978-1498716963",
+            "publisher": "Chapman; Hall/CRC",
+            "publisher-place": "Boca Raton, Florida",
+            "title": "Dynamic documents with R and knitr",
+            "type": "book"
+        },
+        {
+            "URL": "https://CRAN.R-project.org/package=rmarkdown",
+            "author": [
+                {
+                    "family": "Allaire",
+                    "given": "JJ"
+                },
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                },
+                {
+                    "family": "McPherson",
+                    "given": "Jonathan"
+                },
+                {
+                    "family": "Luraschi",
+                    "given": "Javier"
+                },
+                {
+                    "family": "Ushey",
+                    "given": "Kevin"
+                },
+                {
+                    "family": "Atkins",
+                    "given": "Aron"
+                },
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                },
+                {
+                    "family": "Cheng",
+                    "given": "Joe"
+                },
+                {
+                    "family": "Chang",
+                    "given": "Winston"
+                }
+            ],
+            "id": "rmarkdown",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "note": "R package version 1.10",
+            "title": "Rmarkdown: Dynamic documents for r",
+            "title-short": "Rmarkdown",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Open",
+                    "given": "Science Collaboration"
+                }
+            ],
+            "container-title": "Science",
+            "id": "open2015psychology",
+            "issue": "6251",
+            "issued": {
+                "date-parts": [
+                    [
+                        2015
+                    ]
+                ]
+            },
+            "page": "aac4716",
+            "title": "Psychology. Estimating the reproducibility of psychological science",
+            "type": "article-journal",
+            "volume": "349"
+        },
+        {
+            "author": [
+                {
+                    "family": "Bem",
+                    "given": "Daryl J"
+                }
+            ],
+            "container-title": "Journal of personality and social psychology",
+            "id": "bem2011feeling",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2011
+                    ]
+                ]
+            },
+            "page": "407",
+            "publisher": "American Psychological Association",
+            "title": "Feeling the future: Experimental evidence for anomalous retroactive influences on cognition and affect.",
+            "title-short": "Feeling the future",
+            "type": "article-journal",
+            "volume": "100"
+        },
+        {
+            "author": [
+                {
+                    "family": "DeVellis",
+                    "given": "Robert F"
+                }
+            ],
+            "id": "devellis2016scale",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016
+                    ]
+                ]
+            },
+            "publisher": "Sage publications",
+            "title": "Scale development: Theory and applications",
+            "title-short": "Scale development",
+            "type": "book",
+            "volume": "26"
+        },
+        {
+            "DOI": "10.1017/S0140525X0999152X",
+            "ISSN": "1469-1825, 0140-525X",
+            "abstract": "Behavioral scientists routinely publish broad claims about human psychology and behavior in the world’s top journals based on samples drawn entirely from Western, Educated, Industrialized, Rich, and Democratic (WEIRD) societies. Researchers  often implicitly  assume that either there is little variation across human populations, or that these “standard subjects” are as representative of the species as any other population. Are these assumptions justified? Here, our review of the comparative database from across the behavioral sciences suggests both that there is substantial variability in experimental results across populations and that WEIRD subjects are particularly unusual compared with the rest of the species  frequent outliers. The domains reviewed include visual perception, fairness, cooperation, spatial reasoning, categorization and inferential induction, moral reasoning, reasoning styles, self-concepts and related motivations, and the heritability of IQ. The findings suggest that members of WEIRD societies, including young children, are among the least representative populations one could find for generalizing about humans. Many of these findings involve domains that are associated with fundamental aspects of psychology, motivation, and behavior  hence, there are no obvious a priori grounds for claiming that a particular behavioral phenomenon is universal based on sampling from a single subpopulation. Overall, these empirical patterns suggests that we need to be less cavalier in addressing questions of human nature on the basis of data drawn from this particularly thin, and rather unusual, slice of humanity. We close by proposing ways to structurally re-organize the behavioral sciences to best tackle these challenges.",
+            "author": [
+                {
+                    "family": "Henrich",
+                    "given": "Joseph"
+                },
+                {
+                    "family": "Heine",
+                    "given": "Steven J."
+                },
+                {
+                    "family": "Norenzayan",
+                    "given": "Ara"
+                }
+            ],
+            "container-title": "Behavioral and Brain Sciences",
+            "id": "henrichWeirdestPeopleWorld2010",
+            "issue": "2-3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2010,
+                        6
+                    ]
+                ]
+            },
+            "keyword": "behavioral economics,cross-cultural research,cultural psychology,culture,evolutionary psychology,experiments,external validity,generalizability,human universals,population variability",
+            "page": "61-83",
+            "publisher": "Cambridge University Press",
+            "title": "The weirdest people in the world?",
+            "type": "article-journal",
+            "volume": "33"
+        },
+        {
+            "author": [
+                {
+                    "family": "Gigerenzer",
+                    "given": "Gerd"
+                },
+                {
+                    "family": "Hoffrage",
+                    "given": "Ulrich"
+                }
+            ],
+            "container-title": "Psychological review",
+            "id": "gigerenzer1995improve",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        1995
+                    ]
+                ]
+            },
+            "page": "684",
+            "publisher": "American Psychological Association",
+            "title": "How to improve bayesian reasoning without instruction: Frequency formats.",
+            "title-short": "How to improve bayesian reasoning without instruction",
+            "type": "article-journal",
+            "volume": "102"
+        },
+        {
+            "URL": "https://www.R-project.org/",
+            "author": [
+                {
+                    "literal": "R Core Team"
+                }
+            ],
+            "id": "R-base",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "publisher": "R Foundation for Statistical Computing",
+            "publisher-place": "Vienna, Austria",
+            "title": "R: A language and environment for statistical computing",
+            "title-short": "R",
+            "type": "book"
+        },
+        {
+            "URL": "https://CRAN.R-project.org/package=bookdown",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                }
+            ],
+            "id": "R-bookdown",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "note": "R package version 0.22",
+            "title": "Bookdown: Authoring books and technical documents with r markdown",
+            "title-short": "Bookdown",
+            "type": "book"
+        },
+        {
+            "URL": "https://CRAN.R-project.org/package=ggplot2",
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                },
+                {
+                    "family": "Chang",
+                    "given": "Winston"
+                },
+                {
+                    "family": "Henry",
+                    "given": "Lionel"
+                },
+                {
+                    "family": "Pedersen",
+                    "given": "Thomas Lin"
+                },
+                {
+                    "family": "Takahashi",
+                    "given": "Kohske"
+                },
+                {
+                    "family": "Wilke",
+                    "given": "Claus"
+                },
+                {
+                    "family": "Woo",
+                    "given": "Kara"
+                },
+                {
+                    "family": "Yutani",
+                    "given": "Hiroaki"
+                },
+                {
+                    "family": "Dunnington",
+                    "given": "Dewey"
+                }
+            ],
+            "id": "R-ggplot2",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "note": "R package version 3.3.5",
+            "title": "ggplot2: Create elegant data visualisations using the grammar of graphics",
+            "title-short": "ggplot2",
+            "type": "book"
+        },
+        {
+            "URL": "https://github.com/trinker/pacman",
+            "author": [
+                {
+                    "family": "Rinker",
+                    "given": "Tyler"
+                },
+                {
+                    "family": "Kurkiewicz",
+                    "given": "Dason"
+                }
+            ],
+            "id": "R-pacman",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "note": "R package version 0.5.1",
+            "title": "Pacman: Package management tool",
+            "title-short": "Pacman",
+            "type": "book"
+        },
+        {
+            "URL": "https://CRAN.R-project.org/package=tidyverse",
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                }
+            ],
+            "id": "R-tidyverse",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "note": "R package version 1.3.1",
+            "title": "Tidyverse: Easily install and load the tidyverse",
+            "title-short": "Tidyverse",
+            "type": "book"
+        },
+        {
+            "URL": "https://github.com/psyteachr/webex",
+            "author": [
+                {
+                    "family": "Barr",
+                    "given": "Dale"
+                },
+                {
+                    "family": "DeBruine",
+                    "given": "Lisa"
+                }
+            ],
+            "id": "R-webex",
+            "issued": {
+                "date-parts": [
+                    [
+                        2021
+                    ]
+                ]
+            },
+            "note": "R package version 0.9.2",
+            "title": "Webex: Create interactive web exercises in r markdown",
+            "title-short": "Webex",
+            "type": "book"
+        },
+        {
+            "URL": "https://bookdown.org/yihui/bookdown",
+            "author": [
+                {
+                    "family": "Xie",
+                    "given": "Yihui"
+                }
+            ],
+            "id": "bookdown2016",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016
+                    ]
+                ]
+            },
+            "note": "ISBN 978-1138700109",
+            "publisher": "Chapman; Hall/CRC",
+            "publisher-place": "Boca Raton, Florida",
+            "title": "Bookdown: Authoring books and technical documents with R markdown",
+            "title-short": "Bookdown",
+            "type": "book"
+        },
+        {
+            "ISBN": "978-3-319-24277-4",
+            "URL": "https://ggplot2.tidyverse.org",
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                }
+            ],
+            "id": "ggplot22016",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016
+                    ]
+                ]
+            },
+            "publisher": "Springer-Verlag New York",
+            "title": "ggplot2: Elegant graphics for data analysis",
+            "title-short": "ggplot2",
+            "type": "book"
+        },
+        {
+            "URL": "http://github.com/trinker/pacman",
+            "author": [
+                {
+                    "family": "Rinker",
+                    "given": "Tyler W."
+                },
+                {
+                    "family": "Kurkiewicz",
+                    "given": "Dason"
+                }
+            ],
+            "id": "pacman2018",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "note": "version 0.5.0",
+            "publisher-place": "Buffalo, New York",
+            "title": "pacman: Package management for R",
+            "title-short": "pacman",
+            "type": "book"
+        },
+        {
+            "DOI": "10.21105/joss.01686",
+            "author": [
+                {
+                    "family": "Wickham",
+                    "given": "Hadley"
+                },
+                {
+                    "family": "Averick",
+                    "given": "Mara"
+                },
+                {
+                    "family": "Bryan",
+                    "given": "Jennifer"
+                },
+                {
+                    "family": "Chang",
+                    "given": "Winston"
+                },
+                {
+                    "family": "McGowan",
+                    "given": "Lucy D’Agostino"
+                },
+                {
+                    "family": "François",
+                    "given": "Romain"
+                },
+                {
+                    "family": "Grolemund",
+                    "given": "Garrett"
+                },
+                {
+                    "family": "Hayes",
+                    "given": "Alex"
+                },
+                {
+                    "family": "Henry",
+                    "given": "Lionel"
+                },
+                {
+                    "family": "Hester",
+                    "given": "Jim"
+                },
+                {
+                    "family": "Kuhn",
+                    "given": "Max"
+                },
+                {
+                    "family": "Pedersen",
+                    "given": "Thomas Lin"
+                },
+                {
+                    "family": "Miller",
+                    "given": "Evan"
+                },
+                {
+                    "family": "Bache",
+                    "given": "Stephan Milton"
+                },
+                {
+                    "family": "Müller",
+                    "given": "Kirill"
+                },
+                {
+                    "family": "Ooms",
+                    "given": "Jeroen"
+                },
+                {
+                    "family": "Robinson",
+                    "given": "David"
+                },
+                {
+                    "family": "Seidel",
+                    "given": "Dana Paige"
+                },
+                {
+                    "family": "Spinu",
+                    "given": "Vitalie"
+                },
+                {
+                    "family": "Takahashi",
+                    "given": "Kohske"
+                },
+                {
+                    "family": "Vaughan",
+                    "given": "Davis"
+                },
+                {
+                    "family": "Wilke",
+                    "given": "Claus"
+                },
+                {
+                    "family": "Woo",
+                    "given": "Kara"
+                },
+                {
+                    "family": "Yutani",
+                    "given": "Hiroaki"
+                }
+            ],
+            "container-title": "Journal of Open Source Software",
+            "id": "tidyverse2019",
+            "issue": "43",
+            "issued": {
+                "date-parts": [
+                    [
+                        2019
+                    ]
+                ]
+            },
+            "page": "1686",
+            "title": "Welcome to the tidyverse",
+            "type": "article-journal",
+            "volume": "4"
+        }
+    ],
+    "project_biblios": [
+        "book.bib",
+        "packages.bib"
+    ]
+}

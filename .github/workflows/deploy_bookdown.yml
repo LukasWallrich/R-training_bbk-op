@@ -1,0 +1,34 @@
+on:
+  push:
+     branches:
+       - master
+
+name: renderbook
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          persist-credentials: false
+
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - name: prep for tidyverse
+        run: sudo apt-get install xml2 libxml2-dev libssl-dev libcurl4-openssl-dev unixodbc-dev texlive-xetex
+      - name: Install rmarkdown
+        run: Rscript -e 'options(repos = list(CRAN="https://cran.microsoft.com/snapshot/2021-03-14/")); install.packages(c("rmarkdown","webex", "tidyverse", "magrittr", "xml2", "remotes", "styler")); remotes::install_version(package = "bookdown", version = "0.20")'
+      - name: Build HTML book
+        run: Rscript -e 'source("_render.R")'
+      - name: Copy attachments
+        run: Rscript -e 'file.copy("files", "_book", recursive=TRUE)'
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          BRANCH: gh-pages # The branch the action should deploy to. . 
+          FOLDER: _book # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch

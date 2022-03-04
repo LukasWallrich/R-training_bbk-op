@@ -1,0 +1,12 @@
+h1:ext-using-social-surveys-multilevel-modeling-and-survey-weights EXT: Using Social Surveys: Multilevel-modeling and survey weights
+h2:survey-weights-in-the-european-social-survey Survey weights in the European Social Survey
+h3:load-the-data Load the data
+h3:prepare-for-analysis Prepare for analysis
+h2:example-understanding-female-labour-market-participation-with-small-child Example: understanding female labour market participation with small child
+h3:exploring-descriptive-statistics Exploring descriptive statistics
+h3:predictors-of-mothers-working-hours Predictors of mothers’ working hours
+h4:differences-between-countries---fixed-or-random Differences between countries - fixed or random?
+h4:getting-back-to-maternity---interactions-or-random-slopes Getting back to maternity - interactions or random slopes?
+h4:cross-level-interactions Cross-level interactions
+h2:further-resources-meta Further resources
+

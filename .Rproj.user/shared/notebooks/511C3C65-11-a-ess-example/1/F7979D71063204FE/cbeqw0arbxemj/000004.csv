@@ -1,0 +1,84 @@
+"0","pacman::p_load(essurvey, #To access survey data
+               tidyverse, #For data manipulation and plotting
+               gt, #For nicely formatted tables
+               countrycodes, #To replace ESS country codes by names
+               modelsummary, #Create pretty model summary tables
+               lme4 #For multi-level modeling
+               ) 
+"
+"2","Installing package into ‘C:/Users/Lukas Wallrich/Documents/R/win-library/4.1’
+(as ‘lib’ is unspecified)
+"
+"2","Warning:"
+"2"," package ‘countrycodes’ is not available for this version of R
+
+A version of this package for your version of R might be available elsewhere,
+see the ideas at
+https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
+"
+"2","Warning:"
+"2"," unable to access index for repository http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.1:
+  cannot open URL 'http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.1/PACKAGES'
+"
+"2","Warning:"
+"2"," 'BiocManager' not available.  Could not check Bioconductor.
+
+Please use `install.packages('BiocManager')` and then retry.
+"
+"2","Warning in p_install(package, character.only = TRUE, ...) :"
+"2"," 
+"
+"2","Warning in library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :"
+"2","
+ "
+"2"," there is no package called ‘countrycodes’
+"
+"2","Warning in pacman::p_load(essurvey, tidyverse, gt, countrycodes, modelsummary,  :"
+"2","
+ "
+"2"," Failed to install/load:
+countrycodes
+"
+"0","pacman::p_load(essurvey, #To access survey data"
+"0","               tidyverse, #For data manipulation and plotting"
+"0","               gt, #For nicely formatted tables"
+"0","               countrycodes, #To replace ESS country codes by names"
+"0","               modelsummary, #Create pretty model summary tables"
+"0","               lme4 #For multi-level modeling"
+"0","               ) "
+"2","Installing package into ‘C:/Users/Lukas Wallrich/Documents/R/win-library/4.1’
+(as ‘lib’ is unspecified)
+"
+"2","Warning:"
+"2"," package ‘countrycodes’ is not available for this version of R
+
+A version of this package for your version of R might be available elsewhere,
+see the ideas at
+https://cran.r-project.org/doc/manuals/r-patched/R-admin.html#Installing-packages
+"
+"2","Warning:"
+"2"," unable to access index for repository http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.1:
+  cannot open URL 'http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/4.1/PACKAGES'
+"
+"2","Warning:"
+"2"," 'BiocManager' not available.  Could not check Bioconductor.
+
+Please use `install.packages('BiocManager')` and then retry.
+"
+"2","Warning in p_install(package, character.only = TRUE, ...) :"
+"2"," 
+"
+"2","Warning in library(package, lib.loc = lib.loc, character.only = TRUE, logical.return = TRUE,  :"
+"2","
+ "
+"2"," there is no package called ‘countrycodes’
+"
+"2","Warning in pacman::p_load(essurvey, tidyverse, gt, countrycodes, modelsummary,  :"
+"2","
+ "
+"2"," Failed to install/load:
+countrycodes
+"
+"0","uropeansocialsurvey.org/user/new"
+"2","Error: object 'uropeansocialsurvey.org' not found
+"

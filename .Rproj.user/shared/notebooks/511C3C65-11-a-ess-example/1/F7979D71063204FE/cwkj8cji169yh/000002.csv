@@ -1,0 +1,10 @@
+"0","national_bias <- ess_data %>% 
+  group_by(cntry, admge) %>% 
+  #admge whether asking about men or women in subsequent questions
+  summarise(support_working = mean(aftjbyc, na.rm = TRUE)) %>%
+  drop_na() %>>%
+  summarise(gender_bias = diff(support_working))
+"
+"2","Error in ess_data %>% group_by(cntry, admge) %>% summarise(support_working = mean(aftjbyc,  : 
+  could not find function ""%>>%""
+"
